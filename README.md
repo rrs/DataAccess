@@ -1,0 +1,1 @@
+Code originally written while working at pointOne EPoS Ltd http://www.pointone-epos.co.uk/
