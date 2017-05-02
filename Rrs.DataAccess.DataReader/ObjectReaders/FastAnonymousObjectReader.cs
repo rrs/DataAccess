@@ -10,7 +10,7 @@ namespace Rrs.DataAccess.DataReader
     {
         public static Func<IDataReader, T> ManagedReader<T>()
         {
-            var fastReader = new FastObjectReader<T>();
+            var fastReader = new FastAnonymousObjectReader<T>();
 
             return r => fastReader.ReadObject(r);
         }

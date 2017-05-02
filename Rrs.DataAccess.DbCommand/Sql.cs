@@ -45,7 +45,7 @@ namespace Rrs.DataAccess.DbCommand
 
             public T SingleRowReader<T>()
             {
-                return SingleRowReaderExecutor.Execute(_commandText, _dbCon, _dbTran, FastCheckedObjectReader.ManagedReader<T>(), _parameters, _commandType);
+                return SingleRowReaderExecutor.Execute(_commandText, _dbCon, _dbTran, FastObjectReader.ManagedReader<T>(), _parameters, _commandType);
             }
 
             public IEnumerable<T> MultiRowReader<T>(Func<IDataReader, T> readerFunc)
@@ -55,7 +55,7 @@ namespace Rrs.DataAccess.DbCommand
 
             public IEnumerable<T> MultiRowReader<T>()
             {
-                return MultiRowReaderExecutor.Execute(_commandText, _dbCon, _dbTran, FastCheckedObjectReader.ManagedReader<T>(), _parameters, _commandType);
+                return MultiRowReaderExecutor.Execute(_commandText, _dbCon, _dbTran, FastObjectReader.ManagedReader<T>(), _parameters, _commandType);
             }
 
             public IEnumerable<T> MultiValueReader<T>()
@@ -95,17 +95,17 @@ namespace Rrs.DataAccess.DbCommand
                 return this;
             }
 
-            public ProtoTypeReader<T> FromPrototype<T>(T protoType)
+            public PrototypeReader<T> FromPrototype<T>(T prototype)
             {
-                return new ProtoTypeReader<T>(this);
+                return new PrototypeReader<T>(this);
             }
         }
 
-        public class ProtoTypeReader<T>
+        public class PrototypeReader<T>
         {
             private readonly CommandHelper _commandHelper;
 
-            internal ProtoTypeReader(CommandHelper commandHelper)
+            internal PrototypeReader(CommandHelper commandHelper)
             {
                 _commandHelper = commandHelper;
             }
