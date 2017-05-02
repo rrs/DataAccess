@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ParameterList.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="Executors\CommandExecutor.cs" />
     <Compile Include="CommandException.cs" />
