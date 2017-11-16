@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ParameterList.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="Executors\CommandExecutor.cs" />
     <Compile Include="CommandException.cs" />
@@ -51,10 +50,10 @@
     <Compile Include="Executors\MultiRowReaderExecutor.cs" />
     <Compile Include="Executors\MultiValueReaderExecutor.cs" />
     <Compile Include="Executors\NonQueryExecutor.cs" />
-    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Executors\ScalarExecutor.cs" />
     <Compile Include="Executors\SingleRowReaderExecutor.cs" />
+    <Compile Include="SqlParameter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rrs.Common\Rrs.Common.csproj">

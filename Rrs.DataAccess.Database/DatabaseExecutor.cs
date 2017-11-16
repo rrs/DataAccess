@@ -31,6 +31,18 @@ namespace Rrs.DataAccess.Database
             }
         }
 
+        public void ExecuteInTransaction(params IDatabaseCommand[] commands)
+        {
+            using (var transaction = NewTransaction())
+            {
+                foreach(var c in commands)
+                {
+                    transaction.Execute(c);
+                }
+                transaction.Commit();
+            }
+        }
+
         public void ExecuteInTransaction(Action<IDatabaseExecutorTransaction> executeFunc)
         {
             using (var transaction = NewTransaction())

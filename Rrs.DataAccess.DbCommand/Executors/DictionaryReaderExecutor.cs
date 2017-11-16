@@ -22,7 +22,7 @@ namespace Rrs.DataAccess.DbCommand
             }
         }
 
-        public static IEnumerable<Dictionary<string, object>> Execute(string commandText, IDbConnection connection, IDbTransaction transaction, IEnumerable<Tuple<string, object>> parameters = null, CommandType commandType = CommandType.Text)
+        public static IEnumerable<Dictionary<string, object>> Execute(string commandText, IDbConnection connection, IDbTransaction transaction, IEnumerable<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
             return CommandExecutor.Execute(commandText, connection, transaction, DictionaryReaderCommand, parameters, commandType);
         }

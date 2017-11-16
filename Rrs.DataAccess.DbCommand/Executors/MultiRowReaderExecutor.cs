@@ -8,7 +8,7 @@ namespace Rrs.DataAccess.DbCommand
     {
         private static IEnumerable<T> MultiRowReaderCommand<T>(IDbCommand command, Func<IDataReader, T> readerFunc)
         {
-            using (var reader = command.ExecuteReader())
+            using (var reader = command.ExecuteReader(CommandBehavior.SequentialAccess))
             {
                 var list = new List<T>();
 
@@ -21,7 +21,7 @@ namespace Rrs.DataAccess.DbCommand
             }
         }
 
-        public static IEnumerable<T> Execute<T>(string commandText, IDbConnection connection, IDbTransaction transaction, Func<IDataReader, T> readerFunc, IEnumerable<Tuple<string, object>> parameters = null, CommandType commandType = CommandType.Text)
+        public static IEnumerable<T> Execute<T>(string commandText, IDbConnection connection, IDbTransaction transaction, Func<IDataReader, T> readerFunc, IEnumerable<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
             Func<IDbCommand, IEnumerable<T>> commandFunc = command => MultiRowReaderCommand(command, readerFunc);
 

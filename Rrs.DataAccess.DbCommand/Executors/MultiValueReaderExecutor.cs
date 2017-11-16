@@ -21,7 +21,7 @@ namespace Rrs.DataAccess.DbCommand
             }
         }
 
-        public static IEnumerable<T> Execute<T>(string commandText, IDbConnection connection, IDbTransaction transaction, IEnumerable<Tuple<string, object>> parameters = null, CommandType commandType = CommandType.Text)
+        public static IEnumerable<T> Execute<T>(string commandText, IDbConnection connection, IDbTransaction transaction, IEnumerable<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
             return CommandExecutor.Execute(commandText, connection, transaction, MultiValueReaderCommand<T>, parameters, commandType);
         }

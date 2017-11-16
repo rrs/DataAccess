@@ -8,7 +8,7 @@ namespace Rrs.DataAccess.DbCommand
     {
         private static int NonQueryCommand(IDbCommand commmand) => commmand.ExecuteNonQuery();
 
-        public static int Execute(string commandText, IDbConnection connection, IDbTransaction transaction, IEnumerable<Tuple<string, object>> parameters = null, CommandType commandType = CommandType.Text)
+        public static int Execute(string commandText, IDbConnection connection, IDbTransaction transaction, IEnumerable<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
             return CommandExecutor.Execute(commandText, connection, transaction, NonQueryCommand, parameters, commandType);
         }

@@ -1,6 +1,6 @@
 ﻿namespace Rrs.DataAccess
 {
-    public interface IQuery<T>
+    public interface IQuery<out T>
     {
         T Execute();
     }

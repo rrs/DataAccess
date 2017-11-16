@@ -14,7 +14,7 @@ namespace Rrs.DataAccess.DbCommand
             return dataTable;
         }
 
-        public static DataTable Execute(string commandText, IDbConnection connection, IDbTransaction transaction, IEnumerable<Tuple<string, object>> parameters = null, CommandType commandType = CommandType.Text)
+        public static DataTable Execute(string commandText, IDbConnection connection, IDbTransaction transaction, IEnumerable<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
             return CommandExecutor.Execute(commandText, connection, transaction, DataTableReaderCommand, parameters, commandType);
         }

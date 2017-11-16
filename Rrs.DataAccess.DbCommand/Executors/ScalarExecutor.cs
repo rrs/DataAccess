@@ -17,7 +17,7 @@ namespace Rrs.DataAccess.DbCommand
         /// <summary>
         /// Executes a sql scalar stored procedure, returns the value casted to type {T}
         /// </summary>
-        public static T Execute<T>(string commandText, IDbConnection connection, IDbTransaction transaction, IEnumerable<Tuple<string, object>> parameters = null, CommandType commandType = CommandType.Text)
+        public static T Execute<T>(string commandText, IDbConnection connection, IDbTransaction transaction, IEnumerable<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
             return CommandExecutor.Execute(commandText, connection, transaction, ScalarCommand<T>, parameters, commandType);
         }

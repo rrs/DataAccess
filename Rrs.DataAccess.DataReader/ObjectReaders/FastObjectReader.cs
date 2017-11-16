@@ -21,6 +21,23 @@ namespace Rrs.DataAccess.DataReader
     {
         private Func<IDataReader, T> _converter;
 
+        private static readonly Dictionary<Type, MethodInfo> ReadMethods = new Dictionary<Type, MethodInfo>
+        {
+            { typeof(bool), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetBoolean), new[] { typeof(int) }) },
+            { typeof(char), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetChar), new[] { typeof(int) }) },
+            { typeof(string), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetString), new[] { typeof(int) }) },
+            { typeof(byte), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetByte), new[] { typeof(int) }) },
+            { typeof(short), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetInt16), new[] { typeof(int) }) },
+            { typeof(int), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetInt32), new[] { typeof(int) }) },
+            { typeof(long), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetInt64), new[] { typeof(int) }) },
+            { typeof(float), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetFloat), new[] { typeof(int) }) },
+            { typeof(double), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetDouble), new[] { typeof(int) }) },
+            { typeof(decimal), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetDecimal), new[] { typeof(int) }) },
+            { typeof(DateTime), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetDateTime), new[] { typeof(int) }) },
+            { typeof(Guid), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetGuid), new[] { typeof(int) }) },
+            { typeof(byte[]), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetValue), new[] { typeof(int) }) },
+        };
+
         /// <summary>
         /// Tad slower but uses the read extension which offers better info on failures
         /// </summary>
@@ -62,6 +79,8 @@ namespace Rrs.DataAccess.DataReader
 
         private Expression ConvertExpression(Expression readExp, Type columnType, Type propertyType)
         {
+            if (columnType == typeof(byte[])) return Expression.Convert(readExp, propertyType);
+            if (columnType == propertyType) return readExp;
             if (columnType == typeof(int) && propertyType == typeof(bool))
             {
                 return Expression.Equal(readExp, Expression.Constant(1));
@@ -74,22 +93,5 @@ namespace Rrs.DataAccess.DataReader
             if (_converter == null) _converter = ReaderFunc(dataReader);
             return _converter(dataReader);
         }
-
-        private Dictionary<Type, MethodInfo> ReadMethods = new Dictionary<Type, MethodInfo>
-        {
-            { typeof(bool), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetBoolean), new[] { typeof(int) }) },
-            { typeof(char), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetChar), new[] { typeof(int) }) },
-            { typeof(string), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetString), new[] { typeof(int) }) },
-            { typeof(byte), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetByte), new[] { typeof(int) }) },
-            { typeof(short), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetInt16), new[] { typeof(int) }) },
-            { typeof(int), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetInt32), new[] { typeof(int) }) },
-            { typeof(long), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetInt64), new[] { typeof(int) }) },
-            { typeof(float), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetFloat), new[] { typeof(int) }) },
-            { typeof(double), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetDouble), new[] { typeof(int) }) },
-            { typeof(decimal), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetDecimal), new[] { typeof(int) }) },
-            { typeof(DateTime), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetDateTime), new[] { typeof(int) }) },
-            { typeof(Guid), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetGuid), new[] { typeof(int) }) },
-            { typeof(byte[]), typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetValue), new[] { typeof(int) }) },
-        };
     }
 }

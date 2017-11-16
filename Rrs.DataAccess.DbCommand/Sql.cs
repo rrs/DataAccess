@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 
 namespace Rrs.DataAccess.DbCommand
 {
@@ -14,7 +15,7 @@ namespace Rrs.DataAccess.DbCommand
 
         public class CommandHelper
         {
-            private IEnumerable<Tuple<string, object>> _parameters;
+            private IEnumerable<SqlParameter> _parameters;
             private readonly CommandType _commandType;
             private readonly string _commandText;
             private readonly IDbConnection _dbCon;
@@ -38,27 +39,27 @@ namespace Rrs.DataAccess.DbCommand
                 return ScalarExecutor.Execute<T>(_commandText, _dbCon, _dbTran, _parameters, _commandType);
             }
 
-            public T SingleRowReader<T>(Func<IDataReader, T> readerFunc)
+            public T SingleRow<T>(Func<IDataReader, T> readerFunc)
             {
-                return DbCommand.SingleRowReaderExecutor.Execute(_commandText, _dbCon, _dbTran, readerFunc, _parameters, _commandType);
+                return SingleRowReaderExecutor.Execute(_commandText, _dbCon, _dbTran, readerFunc, _parameters, _commandType);
             }
 
-            public T SingleRowReader<T>()
+            public T SingleRow<T>()
             {
                 return SingleRowReaderExecutor.Execute(_commandText, _dbCon, _dbTran, FastObjectReader.ManagedReader<T>(), _parameters, _commandType);
             }
 
-            public IEnumerable<T> MultiRowReader<T>(Func<IDataReader, T> readerFunc)
+            public IEnumerable<T> MultiRow<T>(Func<IDataReader, T> readerFunc)
             {
                 return MultiRowReaderExecutor.Execute(_commandText, _dbCon, _dbTran, readerFunc, _parameters, _commandType);
             }
 
-            public IEnumerable<T> MultiRowReader<T>()
+            public IEnumerable<T> MultiRow<T>()
             {
                 return MultiRowReaderExecutor.Execute(_commandText, _dbCon, _dbTran, FastObjectReader.ManagedReader<T>(), _parameters, _commandType);
             }
 
-            public IEnumerable<T> MultiValueReader<T>()
+            public IEnumerable<T> MultiValue<T>()
             {
                 return MultiValueReaderExecutor.Execute<T>(_commandText, _dbCon, _dbTran, _parameters, _commandType);
             }
@@ -80,24 +81,23 @@ namespace Rrs.DataAccess.DbCommand
 
             public CommandHelper WithParameters(object parameterObject)
             {
-                _parameters = parameterObject.ToParameterList();
-                return this;
-            }
-
-            public CommandHelper WithParameters(IEnumerable<Tuple<string, object>> parameters)
-            {
-                _parameters = parameters;
-                return this;
-            }
-            public CommandHelper WithParameters(IEnumerable<KeyValuePair<string, object>> parameters)
-            {
-                _parameters = parameters.Select(o => new Tuple<string, object>(o.Key, o.Value));
+                _parameters = parameterObject.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                    .Select(propertyInfo => new SqlParameter(propertyInfo.Name, ResolveType(propertyInfo.PropertyType), propertyInfo.GetValue(parameterObject, null)));
                 return this;
             }
 
             public PrototypeReader<T> FromPrototype<T>(T prototype)
             {
                 return new PrototypeReader<T>(this);
+            }
+
+            private Type ResolveType(Type t)
+            {
+                if (t.IsEnum)
+                {
+                    return t.GetEnumUnderlyingType();
+                }
+                return t;
             }
         }
 
@@ -110,14 +110,14 @@ namespace Rrs.DataAccess.DbCommand
                 _commandHelper = commandHelper;
             }
 
-            public T SingleRowReader()
+            public T SingleRow()
             {
-                return _commandHelper.SingleRowReader(FastAnonymousObjectReader.ManagedReader<T>());
+                return _commandHelper.SingleRow(FastAnonymousObjectReader.ManagedReader<T>());
             }
 
-            public IEnumerable<T> MultiRowReader()
+            public IEnumerable<T> MultiRow()
             {
-                return _commandHelper.MultiRowReader(FastAnonymousObjectReader.ManagedReader<T>());
+                return _commandHelper.MultiRow(FastAnonymousObjectReader.ManagedReader<T>());
             }
         }
     }

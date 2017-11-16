@@ -55,6 +55,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Rrs.DataAccess.Database.DbCommand\Rrs.DataAccess.Database.DbCommand.csproj">
+      <Project>{40FDAFCE-3C9F-4E52-A812-9F542103B034}</Project>
+      <Name>Rrs.DataAccess.Database.DbCommand</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rrs.DataAccess.Database.SqlConnection\Rrs.DataAccess.Database.SqlConnection.csproj">
       <Project>{DC145D2C-C5B1-4142-A55C-CA3996D8B15F}</Project>
       <Name>Rrs.DataAccess.Database.SqlConnection</Name>
@@ -62,6 +66,10 @@
     <ProjectReference Include="..\Rrs.DataAccess.Database\Rrs.DataAccess.Database.csproj">
       <Project>{A32CFE18-2585-45E0-AC3E-4AB3F35ABA1A}</Project>
       <Name>Rrs.DataAccess.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rrs.DataAccess.DbCommand\Rrs.DataAccess.DbCommand.csproj">
+      <Project>{AE31599D-4A15-4C5F-9138-165BF8BC9C0E}</Project>
+      <Name>Rrs.DataAccess.DbCommand</Name>
     </ProjectReference>
     <ProjectReference Include="..\Rrs.DataAccess\Rrs.DataAccess.csproj">
       <Project>{DEA1B94E-237C-4186-9F5A-8624DC524176}</Project>
